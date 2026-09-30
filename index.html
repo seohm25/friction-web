@@ -1,0 +1,305 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes"><title>Friction</title><style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Helvetica,Arial,sans-serif;color:#745f6a;background:#dfd6da}button{font-family:inherit;cursor:pointer}#stage{position:relative;height:100dvh;min-height:830px;overflow:hidden}.ios{height:100%;display:flex;flex-direction:column}.statusbar{height:23px;flex-shrink:0;background:linear-gradient(#b6a9b0,#998891);color:#f0eaed;text-shadow:0 -1px #83707a;font-size:12px;font-weight:bold;display:flex;align-items:center;justify-content:space-between;padding:0 9px;border-bottom:1px solid #8d7a84}.signal{display:inline-flex;align-items:flex-end;gap:2px;margin-right:5px}.signal i{width:3px;background:#f0e9ec;display:block;box-shadow:0 1px #86737d}.signal i:nth-child(1){height:4px}.signal i:nth-child(2){height:6px}.signal i:nth-child(3){height:8px}.signal i:nth-child(4){height:10px}.signal i:nth-child(5){height:12px}.battery{display:inline-block;width:23px;height:10px;border:1px solid #f0e9ec;border-radius:2px;position:relative;margin-left:4px;vertical-align:middle}.battery:before{content:'';position:absolute;inset:1px;background:#f0e9ec}.battery:after{content:'';position:absolute;right:-3px;top:2px;height:4px;width:2px;background:#f0e9ec}.navbar{height:58px;flex-shrink:0;background:linear-gradient(#e0d7db 0%,#c3b7bd 48%,#b7aab1 50%,#a09099 100%);box-shadow:inset 0 1px #f2ebee,0 1px 3px #86737d;border-bottom:1px solid #8b7983;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:relative;z-index:1}.navbar h1{font-size:23px;color:#fffafc;text-shadow:0 -2px 1px #9a8992;margin:0;font-weight:bold}.navbutton{color:#fffafc;text-shadow:0 -1px #8b7882;font-weight:bold;font-size:12px;padding:8px 12px;background:linear-gradient(#c4b8be,#a4959d 49%,#988790 50%,#a2929b);border:1px solid #8e7c86;border-radius:5px;box-shadow:inset 0 1px #d8ced3,0 1px #d9d0d5}.back{clip-path:polygon(10px 0,100% 0,100% 100%,10px 100%,0 50%);padding-left:20px}.done{background:linear-gradient(#c8bdc2,#a1929a 49%,#93828b 50%,#a4959d);border-color:#8c7a84}.searchbar{height:48px;flex-shrink:0;background:linear-gradient(#dad1d6,#b9acb3);padding:8px 13px;border-bottom:1px solid #a6979f;box-shadow:inset 0 1px #ece5e8}.search{height:31px;background:#fffafd;border-radius:20px;border:1px solid #baadb3;box-shadow:inset 0 2px 3px #5b435033,0 1px #e9e1e5;color:#c0b4ba;display:flex;align-items:center;padding:0 12px;font-size:14px;gap:8px}.magnify{width:12px;height:12px;border:2px solid #bcafb5;border-radius:50%;position:relative;margin-right:2px}.magnify:after{content:'';position:absolute;width:6px;height:2px;transform:rotate(45deg);background:#bcafb5;right:-5px;bottom:-2px}.screen{flex:1;min-height:0;background:repeating-linear-gradient(90deg,#e0d8dc 0px,#e0d8dc 2px,#ded5d9 2px,#ded5d9 4px);padding:22px 20px 14px}.settings-body{width:min(100%,620px);margin:0 auto}.section-title{font-size:17px;font-weight:bold;color:#97868f;text-shadow:0 1px #f8f3f5;margin:0 12px 8px}.group{background:#fffafc;border:1px solid #c8bcc2;border-radius:10px;overflow:hidden;box-shadow:0 1px #f2ebee;margin-bottom:9px}.setting{min-height:47px;display:flex;align-items:center;justify-content:space-between;padding:9px 13px;gap:10px;border-bottom:1px solid #d9d0d4;font-size:16px;font-weight:bold;color:#6d5763}.setting:last-child{border-bottom:none}.setting .value{font-size:15px;font-weight:normal;color:#9c8c94;display:flex;gap:12px;align-items:center}.chevron{font:bold 25px Arial;color:#b6a9b0;line-height:15px}.switch{height:28px;width:79px;border-radius:15px;border:1px solid #ac9ea5;background:linear-gradient(#86737d,#a798a0 52%,#c5b9bf);box-shadow:inset 0 2px 5px #7a657080,0 1px #fffafc;color:#fffafc;font-size:16px;text-shadow:0 -1px #93828b;font-weight:bold;position:relative;text-align:left;padding:0 0 0 9px;flex-shrink:0}.switch:after{content:'';position:absolute;right:-1px;top:-1px;width:29px;height:28px;border-radius:50%;border:1px solid #b6a8af;background:linear-gradient(#f9f3f5,#e7dfe2);box-shadow:0 1px 3px #5b435055,inset 0 1px #fffafc}.switch.off{background:linear-gradient(#c8bdc3,#f4eef1);color:#aa9ba3;text-shadow:0 1px #fffafc;text-align:right;padding-right:7px;border-color:#bdb1b7}.switch.off:after{right:auto;left:-1px}.description{font-size:12px;line-height:1.4;color:#9a8a92;text-shadow:0 1px #f6f0f2;text-align:center;margin:0 10px 20px}.choice{width:100%;background:#fffafd;text-align:left;border:0;border-bottom:1px solid #d9d0d4;padding:12px 14px;font-size:16px;font-weight:bold;color:#6f5965;display:flex;align-items:center;justify-content:space-between}.choice:last-child{border:0}.check{font-size:22px;color:#97868f;line-height:20px}.blue-text{color:#8e7c86}.sliderrow{padding:14px;display:flex;align-items:center;gap:15px}.sun{font-size:23px;color:#bbaeb5}.track{height:10px;border:1px solid #bcb0b6;border-radius:9px;flex:1;background:linear-gradient(#b6a9b0,#eee7ea);position:relative;box-shadow:0 1px #fffafc}.fill{position:absolute;left:-1px;top:-1px;height:10px;width:64%;border:1px solid #988790;border-radius:9px;background:linear-gradient(#8f7d86,#beb1b7)}.thumb{position:absolute;left:61%;top:-10px;height:28px;width:28px;border-radius:50%;background:linear-gradient(#fffafc,#ddd4d9);border:1px solid #bbaeb5;box-shadow:0 2px 3px #5b435044}.clear-data{color:#8a7781;justify-content:center}.toolbar{height:68px;flex-shrink:0;display:flex;background:linear-gradient(#dad0d5,#bdb0b6 48%,#b0a2a9 50%,#a09099);border-top:1px solid #998891;box-shadow:inset 0 1px #efe8eb;z-index:1}.tab{flex:1;border:0;background:none;color:#f5eff1;text-shadow:0 -1px #97868f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;font-weight:bold}.tab.active{background:linear-gradient(#8c798320,#7c687255);box-shadow:inset 1px 0 #fffafc18,inset -1px 0 #85727c55;color:#fffafc}.tab-icon{font-size:27px;height:31px;line-height:31px;text-shadow:0 2px 1px #8b7882}.tab.active .tab-icon{color:#f2ebee;text-shadow:0 0 5px #a6979f,0 2px #897680}canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;z-index:10;cursor:pointer}#guide{position:absolute;width:30px;height:30px;border:1px dashed #7c6872;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;z-index:11}#status{display:none}#clear{position:absolute;right:8px;bottom:76px;z-index:20;border:1px solid #b7aab1;border-radius:4px;background:linear-gradient(#f8f3f5,#ddd4d8);color:#97868f;font-size:9px;padding:4px 7px;box-shadow:0 1px #fffafc;text-shadow:0 1px white}.demo-note{text-align:center;font-size:9px;color:#ad9ea6;text-shadow:0 1px #f4eef1;margin-top:10px}@media(min-height:920px){.screen{padding-top:35px}.setting{min-height:54px}.description{margin-bottom:25px}.choice{padding:15px}}@media(max-width:440px){.screen{padding:18px 10px 12px}.navbar{height:49px}.navbar h1{font-size:21px}.setting,.choice{font-size:15px}.section-title{font-size:16px}.description{font-size:11px;margin-bottom:17px}#stage{min-height:810px}}
+
+html,body{overflow:hidden}#stage{height:100dvh;min-height:0!important}.screen{overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y pinch-zoom;min-height:0;-webkit-overflow-scrolling:touch;padding-bottom:45px}.ios{position:relative}.settings-body{padding-bottom:20px}.search input{border:0;background:none;outline:none;width:100%;font:inherit;color:#86737d}.search:focus-within{outline:2px solid #b0a2a9}.choice:hover{background:#f7f2f4}.choice:active{background:linear-gradient(#bbaeb5,#95848d);color:#fffafd}.switch:focus-visible,.choice:focus-visible,.tab:focus-visible{outline:3px solid #aea0a7;outline-offset:-3px}canvas{pointer-events:none}#brightness{flex:1;min-width:0;accent-color:#ad9ea6;cursor:pointer}#clear{bottom:75px}.toolbar{min-height:68px}.empty{padding:30px;text-align:center;color:#9d8d95}.overlay{position:absolute;inset:23px 0 0;z-index:30;background:#5b435066;display:grid;place-items:center;padding:25px}.alert{width:min(100%,310px);background:linear-gradient(#9c8c94,#806c77);border:2px solid #e1d9dd;border-radius:12px;box-shadow:0 6px 20px #5b435088,inset 0 1px #fffafc77;color:#fffafd;text-align:center;padding:20px 15px 15px;text-shadow:0 -1px #725d68}.alert h2{font-size:19px;margin:0 0 13px}.alert p{font-size:14px;line-height:1.4}.alert button{display:block;width:100%;margin-top:8px;padding:10px;border-radius:6px;border:1px solid #745f6b;background:linear-gradient(#beb1b8,#9c8c94 49%,#8d7b85 50%,#998891);color:#fffafd;font-size:16px;font-weight:bold;text-shadow:0 -1px #7c6873;box-shadow:inset 0 1px #e1d8dd}.screen .group{scroll-margin:15px}.notice-toast{position:absolute;bottom:82px;left:50%;transform:translateX(-50%);z-index:25;background:#76616ce8;color:#fffafd;padding:10px 20px;border-radius:7px;font-size:13px;pointer-events:none}.subheading{color:#998992;text-shadow:0 1px white;font-size:13px;line-height:1.5;padding:12px}[hidden]{display:none!important}.url{display:block;font-size:12px;font-weight:normal;color:#b2a4ab;margin-top:5px}.settings-body>.group+.group{margin-top:22px}.ios{filter:none}body{background:#dbd2d6}#clear{filter:grayscale(1)}canvas{filter:none!important}#ui-effects{position:absolute;inset:0;filter:none}.ios{filter:none!important}#clear{filter:none}html,body,#stage{background:#fffafc}#ui-effects .overlay{z-index:30}#ui-effects .notice-toast{z-index:35}#ui-effects{filter:none}.ios{filter:none!important}#clear{filter:none}html,body,#stage{background:#fffafc!important}#guide{border-color:#f2ecee!important}input{accent-color:#f2ecee}::selection{background:#f2ecee;color:#fffafc}*{scrollbar-color:#f2ecee #fffafc}::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:#fffafc}::-webkit-scrollbar-thumb{background:#f2ecee;border-radius:6px}canvas{filter:none!important}/* Keep native browser zoom available throughout the settings UI. */
+html,body,#stage,#ui-effects,.ios{touch-action:pan-x pan-y pinch-zoom}
+.screen{touch-action:pan-y pinch-zoom}
+.overlay,.alert{touch-action:pan-x pan-y pinch-zoom}
+
+/* Explicit theme for native controls and every dynamically inserted tab. */
+.setting,.choice{color:#ffb7e2}.setting .value,.choice .value,.chevron,.url{color:#927184}
+.section-title,.description,.subheading,.empty,.demo-note{color:#ffb3d9}
+input,button{accent-color:#ff7e9a}input::placeholder{color:#f48da4}
+#brightness{-webkit-appearance:none;appearance:none;height:9px;border:1px solid #a48a99;border-radius:9px;background:linear-gradient(#a9889d,#ebdbe4)}
+#brightness::-webkit-slider-thumb{-webkit-appearance:none;width:27px;height:27px;border:1px solid #a68c9c;border-radius:50%;background:linear-gradient(#fff9fc,#d2bcca);box-shadow:0 1px 3px #69505f55}
+#brightness::-moz-range-thumb{width:27px;height:27px;border:1px solid #ffbbe5;border-radius:50%;background:#dfcbd7}
+::selection{background:#ffc1e7;color:#fff}*{scrollbar-color:#ffbae3 #fff8fc}
+
+/* Explicit pale-pink theme for all tab content, including replaced HTML. */
+#ui-effects .screen{background:repeating-linear-gradient(90deg,#fff8fe 0,#fff8fe 2px,#fae5f9 2px,#fae5f9 4px)!important}
+#ui-effects .settings-body{color:#fae5f9!important}
+#ui-effects .setting,#ui-effects .choice{background:#fff!important;color:#fae5f9!important;border-color:#fae5f9!important;text-shadow:none!important}
+#ui-effects .settings-body :is(.value,.chevron,.url,.section-title,.description,.subheading,.empty,.demo-note,.always,.check){color:#fae5f9!important;text-shadow:none!important}
+#ui-effects .group{background:#fff!important;border-color:#fae5f9!important;box-shadow:none!important}
+#ui-effects .switch{background:linear-gradient(#fff2fd,#fae5f9)!important;border-color:#fae5f9!important;color:#fff!important;box-shadow:inset 0 1px #fff!important;text-shadow:none!important}
+#ui-effects .switch.off{background:#fff!important;color:#fae5f9!important}
+#ui-effects .switch:after{background:#fff!important;border-color:#fae5f9!important;box-shadow:none!important}
+#ui-effects .choice:hover,#ui-effects .choice:active{background:#fff5fd!important}
+#ui-effects #brightness{background:#fae5f9!important;border-color:#fae5f9!important}
+#ui-effects #brightness::-webkit-slider-thumb{background:#fff!important;border-color:#fae5f9!important;box-shadow:none!important}
+#ui-effects #brightness::-moz-range-thumb{background:#fff!important;border-color:#fae5f9!important}
+#ui-effects .sun{color:#fae5f9!important}
+#ui-effects .alert,#ui-effects .notice-toast{background:linear-gradient(#fff6fe,#fae5f9)!important;border-color:#fae5f9!important;color:#fae5f9!important;text-shadow:none!important;box-shadow:0 4px 15px #fae5f955!important}
+#ui-effects .alert :is(h2,p){color:#fae5f9!important;text-shadow:none!important}
+#ui-effects .alert button{background:#fff!important;border-color:#fae5f9!important;color:#fae5f9!important;text-shadow:none!important;box-shadow:none!important}
+/* Re-encode luminance before the common pink filter so already-pink CSS
+   keeps its intended contrast instead of being tinted twice. */
+#ui-effects .screen,#ui-effects .overlay,#ui-effects .notice-toast{filter:none}
+
+/* No compositing filters: direct pink colors remain stable on scrolling Safari layers. */
+#ui-effects,#ui-effects *,#clear{filter:none!important}
+#ui-effects{isolation:isolate}
+#ui-effects .screen{background:repeating-linear-gradient(90deg,#fffafe 0,#fffafe 2px,#fceffc 2px,#fceffc 4px)!important}
+#ui-effects :is(.statusbar,.navbar,.searchbar,.toolbar){background:linear-gradient(#fff8fe,#fae5f9 49%,#f3d5ef 50%,#fae5f9)!important;border-color:#fae5f9!important;box-shadow:inset 0 1px #fff!important;color:#fff!important;text-shadow:none!important}
+#ui-effects .navbar h1{color:#fff!important;text-shadow:none!important}
+#ui-effects :is(.navbutton,.done,.tab.active){background:linear-gradient(#fff4fd,#fae5f9)!important;border-color:#fae5f9!important;color:#fff!important;box-shadow:none!important;text-shadow:none!important}
+#ui-effects :is(.tab,.tab-icon,.tab.active .tab-icon){color:#fff!important;text-shadow:none!important}
+#ui-effects .search{background:white!important;border-color:#fae5f9!important;box-shadow:inset 0 1px 2px #fae5f9!important;color:#fae5f9!important}
+#ui-effects .search input,#ui-effects input::placeholder{color:#fae5f9!important}
+#ui-effects .magnify{border-color:#fae5f9!important}#ui-effects .magnify:after{background:#fae5f9!important}
+#ui-effects .overlay{background:#fae5f966!important}
+#ui-effects .alert,#ui-effects .notice-toast{background:#fff8fe!important}
+#clear{background:#fff8fe!important;color:#fae5f9!important;border-color:#fae5f9!important;text-shadow:none!important;box-shadow:none!important}
+/* One-pixel ordered texture, independent of all text and UI colors. */
+#ui-effects::after{content:'';position:absolute;inset:0;z-index:99;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
+.pink-pixel-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}.tab-icon .pink-pixel-icon{width:29px;height:29px}.sun .pink-pixel-icon{width:1em;height:1em} .overlay{inset:0!important}</style></head><body><main id="stage"><div id="ui-effects"><div class="ios">
+
+<header class="navbar"><button class="navbutton back">Settings</button><h1>Privacy</h1><button class="navbutton done">Done</button></header>
+<div class="searchbar"><div class="search"><span class="magnify"></span><input id="search" type="search" placeholder="Search Settings" aria-label="Search Settings"></div></div>
+<div class="screen"><div class="settings-body">
+<h2 class="section-title">Website Settings</h2><div class="group"><div class="setting"><span>Accept Cookies</span><button class="switch" aria-label="Accept Cookies: on">ON</button></div><div class="setting"><span>Notifications</span><button class="switch" aria-label="Notifications: on">ON</button></div><div class="setting"><span>Location Services</span><button class="switch off" aria-label="Location Services: off">OFF</button></div><button class="choice"><span>Website Data</span><span class="value">12.8 MB &nbsp; <span class="chevron">›</span></span></button></div>
+<p class="description">Allow websites to remember your preferences<br>and provide a more personal experience.</p>
+<h2 class="section-title">Allow Cookies</h2><div class="group"><button class="choice"><span>Always</span><span class="check">✓</span></button><button class="choice">From Visited Websites</button><button class="choice">Never</button></div>
+<p class="description">Cookies from other websites will be blocked<br>unless you choose to allow them.</p>
+<h2 class="section-title">Display</h2><div class="group"><div class="sliderrow"><span class="sun"><svg class="pink-pixel-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><pattern id="pink-sun-small" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#fae5f9"/><rect width="1" height="1" fill="#e8bddd"/><rect x="2" y="2" width="1" height="1" fill="#fff7fe"/></pattern></defs><g fill="url(#pink-sun-small)"><circle cx="16" cy="16" r="6"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(0 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(45 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(90 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(135 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(180 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(225 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(270 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(315 16 16)"/></g></svg></span><input id="brightness" type="range" min="10" max="100" value="64" aria-label="Brightness"><span class="sun" style="font-size:31px"><svg class="pink-pixel-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><pattern id="pink-sun-large" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#fae5f9"/><rect width="1" height="1" fill="#e8bddd"/><rect x="2" y="2" width="1" height="1" fill="#fff7fe"/></pattern></defs><g fill="url(#pink-sun-large)"><circle cx="16" cy="16" r="6"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(0 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(45 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(90 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(135 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(180 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(225 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(270 16 16)"/><rect x="15" y="1" width="2" height="6" rx=".6" transform="rotate(315 16 16)"/></g></svg></span></div><div class="setting"><span>Auto-Brightness</span><button class="switch" aria-label="Auto-Brightness: on">ON</button></div></div>
+<div class="group" style="margin-top:20px"><button class="choice clear-data">Clear Cookies and Data</button></div><h2 class="section-title">General</h2><div class="group"><div class="setting">Sounds<button class="switch">ON</button></div><div class="setting">Vibration<button class="switch">ON</button></div><button class="choice" data-options="1 Minute|2 Minutes|5 Minutes|Never">Auto-Lock<span class="value">1 Minute ›</span></button><button class="choice" data-options="Small|Medium|Large">Text Size<span class="value">Medium ›</span></button></div>
+<p class="description">Choose how your phone looks and feels.</p><h2 class="section-title">Notifications</h2><div class="group"><div class="setting">Sounds<button class="switch">ON</button></div><div class="setting">Badge App Icon<button class="switch">ON</button></div><div class="setting">Show on Lock Screen<button class="switch off">OFF</button></div><button class="choice" data-options="None|Banners|Alerts">Alert Style<span class="value">Banners ›</span></button></div><p class="description">Notifications appear even when an app is not open.</p>
+<h2 class="section-title">Safari</h2><div class="group"><button class="choice" data-options="Google|Yahoo!|Bing">Search Engine<span class="value">Google ›</span></button><div class="setting">Private Browsing<button class="switch off">OFF</button></div><div class="setting">Block Pop-ups<button class="switch">ON</button></div><div class="setting">Fraud Warning<button class="switch">ON</button></div><div class="setting">JavaScript<button class="switch">ON</button></div></div><p class="description">These controls only change this simulated interface.</p>
+<h2 class="section-title">Advanced</h2><div class="group"><div class="setting">Do Not Track<button class="switch off">OFF</button></div><div class="setting">Save Form Data<button class="switch">ON</button></div><button class="choice" data-action="history">Clear History</button><button class="choice" data-action="reset">Reset All Settings</button></div><div class="demo-note">Touch study · Simulated settings · No device settings are changed.</div>
+</div></div>
+<nav class="toolbar"><button class="tab" data-page="Bookmarks"><span class="tab-icon" aria-hidden="true">▤</span>Bookmarks</button><button class="tab" data-page="History"><span class="tab-icon" aria-hidden="true">◷</span>History</button><button class="tab active" data-page="Settings"><span class="tab-icon" aria-hidden="true"><svg class="pink-pixel-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><pattern id="pink-settings-gear" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#fae5f9"/><rect width="1" height="1" fill="#e8bddd"/><rect x="2" y="2" width="1" height="1" fill="#fff7fe"/></pattern></defs><g fill="url(#pink-settings-gear)"><path fill-rule="evenodd" d="M16 5a11 11 0 1 0 0 22 11 11 0 0 0 0-22Zm0 6a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(0 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(45 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(90 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(135 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(180 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(225 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(270 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(315 16 16)"/></g></svg></span>Settings</button><button class="tab" data-page="About"><span class="tab-icon" aria-hidden="true">ⓘ</span>About</button></nav>
+</div></div><canvas id="canvas" aria-label="Touch the simulated interface to leave gesture traces"></canvas><div id="guide"></div><button id="clear">Reset traces</button></main><div id="status"></div><script>let shapes = [];
+let images = {};
+
+// Distances are CSS pixels; speeds are pixels per millisecond.
+const GESTURE = {
+  jitter: 3,
+  tapSlop: 8,
+  holdMs: 250,
+  doubleTapMs: 300,
+  doubleTapRadius: 28,
+  nudgeMax: 14,
+  swipeDistance: 24,
+  swipeSpeed: 0.18,
+  flickDistance: 8,
+  flickSpeed: 0.5,
+  speedWindowMs: 70,
+  pinchStep: 4,
+  trailDistance: 9,
+  trailMs: 45,
+};
+
+const pointers = new Map();
+let session = null;
+let pairDistance = null;
+let pendingTap = null;
+let tapTimer = null;
+
+function distance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function pointFrom(event) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  return { x: event.clientX - rect.left, y: event.clientY - rect.top,
+    t: performance.now() };
+}
+
+function addShape(type, point, size) {
+  shapes.push({ type, x: point.x, y: point.y, size });
+}
+
+function flushTap() {
+  clearTimeout(tapTimer);
+  if (pendingTap) addShape('single_tap', pendingTap, 50);
+  pendingTap = null;
+  tapTimer = null;
+}
+
+function startPointer(event) {
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  event.preventDefault();
+  event.currentTarget.setPointerCapture(event.pointerId);
+  const p = pointFrom(event);
+  pointers.set(event.pointerId, p);
+  if (pointers.size === 1) {
+    session = { start: p, maxDistance: 0, samples: [p], multi: false,
+      lastShape: null, lastType: null };
+  } else {
+    session.multi = true;
+    flushTap();
+    pairDistance = pointers.size === 2 ? distance(...pointers.values()) : null;
+  }
+}
+
+function movePointer(event) {
+  if (!pointers.has(event.pointerId) || !session) return;
+  event.preventDefault();
+  const p = pointFrom(event);
+  pointers.set(event.pointerId, p);
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const d = distance(a, b);
+    if (pairDistance === null) pairDistance = d;
+    const delta = d - pairDistance;
+    // Accumulate even tiny movements until they pass the noise threshold.
+    if (Math.abs(delta) >= GESTURE.pinchStep) {
+      const center = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      const type = delta < 0 ? 'pinch' : 'spread';
+      const size = type === 'pinch'
+        ? Math.max(40, Math.min(80, 40 + d * 40 / 150))
+        : Math.max(60, Math.min(120, 60 + (d - 150) * 60 / 150));
+      addShape(type, center, size);
+      pairDistance = d;
+    }
+    return;
+  }
+  // After a two-finger gesture, wait for all fingers to lift.
+  if (session.multi) return;
+  updateSingle(p);
+}
+
+function updateSingle(p) {
+ const s=session, displacement=distance(s.start,p);
+ s.maxDistance=Math.max(s.maxDistance,displacement);
+ s.samples.push(p);
+ while(s.samples.length>2&&p.t-s.samples[0].t>70)s.samples.shift();
+ const recent=s.samples[0], speed=distance(recent,p)/Math.max(1,p.t-recent.t);
+ if(s.maxDistance<3)return;
+ const moved=s.lastShape?distance(s.lastShape,p):Infinity;
+ if(s.lastShape&&(moved<8||p.t-s.lastShape.t<24))return;
+ if(s.maxDistance<10)addShape('nudge',p,40);
+ else {
+  // The reference performance layers several marks on the same stroke.
+  addShape('drag',p,100);
+  if(displacement>20){addShape('swipe',p,60);addShape('flick',p,80);}
+ }
+ s.lastShape=p;s.lastType='trail';
+}
+
+function endPointer(event) {
+  if (!pointers.has(event.pointerId) || !session) return;
+  event.preventDefault();
+  const p = pointFrom(event);
+  const s = session;
+  if (!s.multi) {
+    const previous = pointers.get(event.pointerId);
+    if (distance(previous, p) > 0) updateSingle(p);
+    const duration = p.t - s.start.t;
+    if (s.maxDistance <= GESTURE.tapSlop && !s.lastShape) {
+      if (duration >= GESTURE.holdMs) {
+        flushTap();
+        addShape('short_hold', p, 50);
+      } else if (pendingTap && p.t - pendingTap.t <= GESTURE.doubleTapMs &&
+          distance(pendingTap, p) <= GESTURE.doubleTapRadius) {
+        clearTimeout(tapTimer);
+        pendingTap = null;
+        addShape('double_tap', p, 30);
+      } else {
+        flushTap();
+        pendingTap = p;
+        tapTimer = setTimeout(flushTap, GESTURE.doubleTapMs);
+      }
+    }
+  }
+  pointers.delete(event.pointerId);
+  if (pointers.size === 2) pairDistance = distance(...pointers.values());
+  else pairDistance = null;
+  if (!pointers.size) session = null;
+}
+
+function cancelPointer(event) {
+  if (!pointers.has(event.pointerId)) return;
+  resetPointers();
+}
+
+function resetPointers() {
+  pointers.clear();
+  session = null;
+  pairDistance = null;
+}
+
+const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+const guide=document.getElementById('guide');
+let virtual=false, anchor=null;
+function wrap(e,id,x,y){return {pointerId:id,pointerType:e.pointerType,button:0,clientX:x,clientY:y,currentTarget:{getBoundingClientRect:()=>canvas.getBoundingClientRect(),setPointerCapture:()=>{}},preventDefault:()=>e.preventDefault()};}
+const stage=document.getElementById('stage');
+function gestureEvent(e){return {pointerId:e.pointerId,pointerType:e.pointerType,button:e.button,clientX:e.clientX,clientY:e.clientY,currentTarget:{getBoundingClientRect:()=>canvas.getBoundingClientRect(),setPointerCapture:()=>{}},preventDefault:()=>{}};}
+stage.addEventListener('pointerdown',e=>{
+ if(e.target.closest('#clear'))return;
+ startPointer(gestureEvent(e));
+ if(e.altKey&&e.pointerType==='mouse'){
+ const r=canvas.getBoundingClientRect();anchor={x:r.left+r.width/2,y:r.top+r.height/2};virtual=true;
+ startPointer(wrap(e,-99,anchor.x,anchor.y));guide.style.left=r.width/2+'px';guide.style.top=r.height/2+'px';guide.style.display='block';
+ }
+});
+window.addEventListener('pointermove',e=>movePointer(gestureEvent(e)));
+window.addEventListener('pointerup',e=>{endPointer(gestureEvent(e));if(virtual){endPointer(wrap(e,-99,anchor.x,anchor.y));virtual=false;guide.style.display='none';}});
+window.addEventListener('pointercancel',e=>{cancelPointer(e);virtual=false;guide.style.display='none';});
+window.addEventListener('blur',()=>{resetPointers();virtual=false;guide.style.display='none';});
+const originalAddShape=addShape;
+addShape=function(type,p,size){originalAddShape(type,p,size);document.getElementById('status').textContent='Touch recorded.';render();};
+const vectorGeometry={"drag": {"width": 956.0, "height": 232.0, "color": "#1542ff", "ellipses": [[56.0973, 116.0964, 55.9228, 115.8416, -0.0064], [104.0988, 116.0916, 55.9078, 115.8617, 0.0035], [240.0657, 116.0902, 55.9168, 115.855, 0.0032], [376.0407, 116.0858, 55.9157, 115.8552, -0.0029], [576.0047, 116.0742, 55.902, 115.8495, -0.0092], [899.9377, 116.0811, 55.9143, 115.8496, -0.0024]]}, "swipe": {"width": 1428.0, "height": 100.0, "color": "#e5e2bd", "ellipses": [[307.9385, 50.0205, 307.81, 49.9545, 0.0002], [824.0274, 50.0189, 307.7912, 49.9569, 0.0002], [1119.8717, 50.0176, 307.9846, 49.9538, 0.0004]]}, "flick": {"width": 2589.0, "height": 338.0, "color": "#1542ff", "ellipses": [[105.4078, 305.9106, 31.6175, 104.4939, 90.0055], [1321.8205, 237.5529, 36.1492, 99.9855, 90.0066], [1745.5602, 169.1999, 31.6066, 104.4855, 89.993], [2488.1561, 32.5541, 31.6524, 99.8519, 90.0112], [756.9229, 32.5526, 31.6532, 99.8044, 89.999]]}, "pinch": {"width": 90.0, "height": 140.0, "color": "#7b593e", "ellipses": [[34.9287, 43.7219, 51.5853, 21.4043, 54.1811], [55.0878, 96.1848, 51.5894, 21.4006, 54.1832]]}, "spread": {"width": 732.0, "height": 535.0, "color": "#f0ff83", "ellipses": [[219.5749, 331.7272, 283.037, 96.7923, -42.2039], [512.408, 203.425, 283.0537, 96.7853, -42.2005]]}, "nudge": {"width": 972.0, "height": 264.0, "color": "#f0ff83", "ellipses": [[124.0195, 238.0082, 123.7899, 25.8871, 0.0022], [396.0022, 176.0232, 123.7717, 23.8839, -0.0045], [685.9952, 82.0512, 125.7985, 25.8898, 0.0029], [845.9562, 26.0524, 125.7782, 25.8976, 0.0001]]}, "single_tap": {"width": 88.0, "height": 96.0, "color": "#7b593e", "ellipses": [[43.9824, 48.0418, 43.9231, 47.8563, 0.0197]]}, "double_tap": {"width": 176.0, "height": 188.0, "color": "#7b593e", "ellipses": [[55.938, 62.014, 55.8993, 61.8775, 0.2107], [119.9392, 125.9937, 55.9212, 61.8778, 0.0485]]}, "short_hold": {"width": 524.0, "height": 556.0, "color": "#e5e2bd", "ellipses": [[182.0817, 247.9742, 181.8501, 247.7915, 0.0106], [342.0591, 307.9608, 181.8617, 247.7926, 0.0052]]}};
+function render(){
+ const r=canvas.getBoundingClientRect(),d=window.devicePixelRatio||1;
+ canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.scale(d,d);
+ for(const s of shapes){
+  const v=vectorGeometry[s.type];if(!v)continue;
+  // Match the reference video's proportions without stretching the SVG.
+  const widths={drag:102.5,swipe:100,flick:174,nudge:92,pinch:35,spread:245,single_tap:21,double_tap:33,short_hold:140};
+  const screenScale=Math.min(r.width,480)/402;
+  const extent=widths[s.type]*screenScale*(s.type==='spread'?Math.max(.8,Math.min(1.35,s.size/80)):1);
+  const scale=extent/Math.max(v.width,v.height);
+  ctx.save();ctx.translate(s.x-v.width*scale/2,s.y-v.height*scale/2);ctx.scale(scale,scale);
+  ctx.fillStyle=v.color;
+  for(const [cx,cy,rx,ry,angle] of v.ellipses){ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,angle*Math.PI/180,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+ }
+}
+new ResizeObserver(render).observe(canvas.parentElement);
+// Keyboard activation leaves the same trace as clicking; no settings are stored.
+document.querySelectorAll('.ios button').forEach(button=>button.addEventListener('click',event=>{
+ if(event.detail===0){const r=button.getBoundingClientRect(),c=canvas.getBoundingClientRect();addShape('single_tap',{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top},50);}
+}));
+document.getElementById('clear').onclick=()=>{clearTimeout(tapTimer);pendingTap=null;resetPointers();shapes=[];guide.style.display='none';virtual=false;render();document.getElementById('status').textContent='Ready.';};
+
+const screen=document.querySelector('.screen'), body=document.querySelector('.settings-body');
+const initialBody=body.innerHTML;let savedBody=initialBody;let currentPage='Settings';let historyCleared=false;
+function toast(message){document.querySelector('.notice-toast')?.remove();const n=document.createElement('div');n.className='notice-toast';n.textContent=message;document.getElementById('ui-effects').append(n);setTimeout(()=>n.remove(),1800);}
+function dialog(title,message,options){
+ document.querySelector('.overlay')?.remove();const overlay=document.createElement('div');overlay.className='overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label',title);const panel=document.createElement('div');panel.className='alert';const h=document.createElement('h2');h.textContent=title;panel.append(h);if(message){const p=document.createElement('p');p.textContent=message;panel.append(p);}
+ const previous=document.activeElement;
+ function close(){overlay.remove();previous?.focus();}
+ options.forEach(([label,action])=>{const b=document.createElement('button');b.textContent=label;b.onclick=()=>{close();action?.();};panel.append(b);});overlay.append(panel);document.getElementById('ui-effects').append(overlay);panel.querySelector('button').focus();overlay.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const buttons=[...panel.querySelectorAll('button')],i=buttons.indexOf(document.activeElement);e.preventDefault();buttons[(i+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}});
+}
+function initSwitches(){body.querySelectorAll('.switch').forEach(b=>{b.setAttribute('role','switch');b.setAttribute('aria-checked',String(!b.classList.contains('off')));b.setAttribute('aria-label',b.parentElement.firstChild.textContent.trim());});}
+function selectPage(name){
+ if(currentPage==='Settings')savedBody=body.innerHTML;
+ currentPage=name;document.querySelector('.navbar h1').textContent=name==='Settings'?'Privacy':name;
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.page===name));document.getElementById('search').value='';
+ if(name==='Settings'){body.innerHTML=savedBody;initSwitches();}
+ else if(name==='Bookmarks')body.innerHTML='<h2 class="section-title">Bookmarks</h2><div class="group"><button class="choice" data-bookmark="Favorites"><span>▤ &nbsp; Favorites</span><span class="chevron">›</span></button><button class="choice" data-bookmark="Reading List"><span>▤ &nbsp; Reading List</span><span class="value">3 items ›</span></button></div><h2 class="section-title">Saved Pages</h2><div class="group"><button class="choice" data-bookmark="Apple">Apple<span class="chevron">›</span></button><button class="choice" data-bookmark="Weather">Weather<span class="chevron">›</span></button><button class="choice" data-bookmark="Privacy Guide">Privacy Guide<span class="chevron">›</span></button></div><p class="description">Your favorite pages, all in one place.</p>';
+ else if(name==='History')body.innerHTML=historyCleared?'<p class="empty">No History</p>':'<h2 class="section-title">Today</h2><div class="group"><button class="choice" data-bookmark="Apple"><span>Apple<small class="url">apple.com</small></span><span class="value">9:41 AM ›</span></button><button class="choice" data-bookmark="Weather"><span>Weather<small class="url">weather.example</small></span><span class="value">9:32 AM ›</span></button><button class="choice" data-bookmark="New York"><span>New York<small class="url">maps.example</small></span><span class="value">9:18 AM ›</span></button></div><h2 class="section-title">Yesterday</h2><div class="group"><button class="choice" data-bookmark="Privacy Guide"><span>Privacy Guide<small class="url">privacy.example</small></span><span class="value">8:24 PM ›</span></button><button class="choice" data-bookmark="Reading List">Reading List<span class="value">6:05 PM ›</span></button></div><div class="group"><button class="choice clear-data" data-action="history">Clear History</button></div><p class="description">Your recently visited pages appear here.</p>';
+ else if(name==='About')body.innerHTML='<h2 class="section-title">About</h2><div class="group"><div class="setting">Name<span class="value">iPhone</span></div><div class="setting">Network<span class="value">AT&amp;T</span></div></div><div class="group"><div class="setting">Songs<span class="value">128</span></div><div class="setting">Videos<span class="value">12</span></div><div class="setting">Photos<span class="value">256</span></div><div class="setting">Applications<span class="value">24</span></div><div class="setting">Capacity<span class="value">16 GB</span></div><div class="setting">Available<span class="value">6.4 GB</span></div><div class="setting">Version<span class="value">6.1.3 (10B329)</span></div><div class="setting">Carrier<span class="value">AT&amp;T</span></div></div><div class="group"><button class="choice" data-bookmark="Legal">Legal<span class="chevron">›</span></button><button class="choice" data-bookmark="About This Study">About This Study<span class="chevron">›</span></button></div><p class="description">Simulated device information.<br>No information is read from your phone.</p>';
+
+ screen.scrollTop=0;
+}
+initSwitches();
+body.addEventListener('input',e=>{if(e.target.id==='brightness'){e.target.setAttribute('value',e.target.value);screen.style.opacity=String(0.55+Number(e.target.value)*0.0045);}});
+body.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ if(b.classList.contains('switch')){const off=b.classList.toggle('off');b.textContent=off?'OFF':'ON';b.setAttribute('aria-checked',String(!off));return;}
+ const label=b.textContent.trim();
+ if(['Always','From Visited Websites','Never'].some(x=>label.startsWith(x))&&!b.dataset.options){const group=b.closest('.group');group.querySelectorAll('.check').forEach(n=>n.remove());group.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));const check=document.createElement('span');check.className='check';check.textContent='✓';b.append(check);return;}
+ if(b.dataset.options){const title=b.firstChild.textContent.trim();dialog(title,'Choose an option.',[...b.dataset.options.split('|').map(value=>[value,()=>{b.querySelector('.value').textContent=value+' ›';}]),['Cancel']]);return;}
+ if(label.startsWith('Website Data')){dialog('Website Data','12.8 MB stored by this simulated website.',[['Remove All Website Data',()=>{b.querySelector('.value').textContent='0 KB ›';toast('Website data cleared.');}],['Cancel']]);return;}
+ if(b.dataset.bookmark){dialog(b.dataset.bookmark,'This is a local demonstration page. Explore the controls and leave a trace.',[['Done']]);return;}
+ if(b.dataset.action==='reset'){dialog('Reset All Settings','Restore the settings in this demo?',[['Reset',()=>{savedBody=initialBody;body.innerHTML=initialBody;screen.style.opacity='';initSwitches();toast('Settings reset.');}],['Cancel']]);return;}
+ if(b.dataset.action==='history'){dialog('Clear History','Remove browsing history from this demo?',[['Clear History',()=>{historyCleared=true;if(currentPage==='History')body.innerHTML='<p class="empty">No History</p>';toast('History cleared.');}],['Cancel']]);return;}
+ if(b.classList.contains('clear-data'))dialog('Clear Cookies and Data','This will remove the website data stored in this demo.',[['Clear Cookies and Data',()=>{const row=[...body.querySelectorAll('.choice')].find(n=>n.textContent.startsWith('Website Data'));if(row)row.querySelector('.value').textContent='0 KB ›';toast('Cookies and data cleared.');}],['Cancel']]);
+});
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>selectPage(b.dataset.page)));
+document.querySelector('.back').onclick=()=>{selectPage('Settings');screen.scrollTop=0;};
+document.querySelector('.done').onclick=()=>{toast('Settings saved.');document.getElementById('search').blur();};
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();body.querySelectorAll('.setting,.choice').forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(q));body.querySelectorAll('.group').forEach(group=>group.hidden=![...group.querySelectorAll('.setting,.choice')].some(row=>!row.hidden)&&!group.querySelector('.sliderrow'));});
+</script></html>

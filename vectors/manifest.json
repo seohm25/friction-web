@@ -1,0 +1,47 @@
+{
+  "drag": {
+    "color": "#1542ff",
+    "silhouette_iou": 0.99646,
+    "source": "touchscreen-02.png"
+  },
+  "swipe": {
+    "color": "#e5e2bd",
+    "silhouette_iou": 0.99757,
+    "source": "touchscreen-03.png"
+  },
+  "flick": {
+    "color": "#1542ff",
+    "silhouette_iou": 0.9797,
+    "source": "touchscreen-04.png"
+  },
+  "pinch": {
+    "color": "#7b593e",
+    "silhouette_iou": 0.99538,
+    "source": "touchscreen-05.png"
+  },
+  "spread": {
+    "color": "#f0ff83",
+    "silhouette_iou": 0.9987,
+    "source": "touchscreen-06.png"
+  },
+  "nudge": {
+    "color": "#f0ff83",
+    "silhouette_iou": 0.98911,
+    "source": "touchscreen-07.png"
+  },
+  "single_tap": {
+    "color": "#7b593e",
+    "silhouette_iou": 0.99486,
+    "source": "touchscreen-08.png"
+  },
+  "double_tap": {
+    "color": "#7b593e",
+    "silhouette_iou": 0.99659,
+    "source": "touchscreen-09.png"
+  },
+  "short_hold": {
+    "color": "#e5e2bd",
+    "silhouette_iou": 0.99898,
+    "source": "touchscreen-10.png"
+  }
+}
