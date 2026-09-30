@@ -52,13 +52,7 @@ input,button{accent-color:#ff7e9a}input::placeholder{color:#f48da4}
 #clear{background:#fff8fe!important;color:#fae5f9!important;border-color:#fae5f9!important;text-shadow:none!important;box-shadow:none!important}
 /* One-pixel ordered texture, independent of all text and UI colors. */
 #ui-effects::after{content:'';position:absolute;inset:0;z-index:99;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
-.pink-pixel-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}.tab-icon .pink-pixel-icon{width:29px;height:29px}.sun .pink-pixel-icon{width:1em;height:1em} .overlay{inset:0!important}
-/* Legacy iOS Safari fallbacks */
-#stage{height:100vh}
-@supports (height:100dvh){#stage{height:100dvh}}
-.settings-body{width:100%;max-width:620px}
-.overlay{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center}
-</style></head><body><main id="stage"><div id="ui-effects"><div class="ios">
+.pink-pixel-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}.tab-icon .pink-pixel-icon{width:29px;height:29px}.sun .pink-pixel-icon{width:1em;height:1em} .overlay{inset:0!important}</style></head><body><main id="stage"><div id="ui-effects"><div class="ios">
 
 <header class="navbar"><button class="navbutton back">Settings</button><h1>Privacy</h1><button class="navbutton done">Done</button></header>
 <div class="searchbar"><div class="search"><span class="magnify"></span><input id="search" type="search" placeholder="Search Settings" aria-label="Search Settings"></div></div>
@@ -230,19 +224,6 @@ const guide=document.getElementById('guide');
 let virtual=false, anchor=null;
 function wrap(e,id,x,y){return {pointerId:id,pointerType:e.pointerType,button:0,clientX:x,clientY:y,currentTarget:{getBoundingClientRect:()=>canvas.getBoundingClientRect(),setPointerCapture:()=>{}},preventDefault:()=>e.preventDefault()};}
 const stage=document.getElementById('stage');
-// Legacy iOS Safari: synthesize pointer-like events from touch events when Pointer Events are unavailable.
-if(!window.PointerEvent){
- var legacyTouches={};
- function legacyTouchEvent(t,type,target){return {pointerId:t.identifier+1,pointerType:'touch',button:0,clientX:t.clientX,clientY:t.clientY,currentTarget:target||stage,preventDefault:function(){}};}
- function legacyStart(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'down',stage);legacyTouches[pe.pointerId]=pe;startPointer(pe);} }
- function legacyMove(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'move',stage);legacyTouches[pe.pointerId]=pe;movePointer(pe);} }
- function legacyEnd(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'up',stage);endPointer(pe);delete legacyTouches[pe.pointerId];} }
- stage.addEventListener('touchstart',legacyStart,{passive:false});
- window.addEventListener('touchmove',legacyMove,{passive:false});
- window.addEventListener('touchend',legacyEnd,{passive:false});
- window.addEventListener('touchcancel',legacyEnd,{passive:false});
-}
-
 function gestureEvent(e){return {pointerId:e.pointerId,pointerType:e.pointerType,button:e.button,clientX:e.clientX,clientY:e.clientY,currentTarget:{getBoundingClientRect:()=>canvas.getBoundingClientRect(),setPointerCapture:()=>{}},preventDefault:()=>{}};}
 stage.addEventListener('pointerdown',e=>{
  if(e.target.closest('#clear'))return;
@@ -275,7 +256,7 @@ function render(){
   ctx.restore();
  }
 }
-if(window.ResizeObserver){new ResizeObserver(render).observe(canvas.parentElement);}else{window.addEventListener('resize',render);window.addEventListener('orientationchange',render);setTimeout(render,0);}
+new ResizeObserver(render).observe(canvas.parentElement);
 // Keyboard activation leaves the same trace as clicking; no settings are stored.
 document.querySelectorAll('.ios button').forEach(button=>button.addEventListener('click',event=>{
  if(event.detail===0){const r=button.getBoundingClientRect(),c=canvas.getBoundingClientRect();addShape('single_tap',{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top},50);}
