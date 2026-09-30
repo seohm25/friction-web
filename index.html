@@ -316,7 +316,7 @@ const referenceGeometry={
  swipe:{color:'#e5e2bd',ellipses:[[0,0,180,24,0]]},
  flick:{color:'#1542ff',ellipses:[[-129,0,25,10,0],[129,0,18,10,0]]},
  pinch:{color:'#7b593e',ellipses:[[-60,50,130,42,-42],[60,-50,130,42,-42]]},
- spread:{color:'#f0ff83',ellipses:[[-60,50,150,48,-42],[60,-50,150,48,-42]]},
+ spread:{color:'#e5e2bd',ellipses:[[-60,50,150,48,-42],[60,-50,150,48,-42]]},
  nudge:{color:'#f0ff83',ellipses:[[0,0,21,26,0]]},
  single_tap:{color:'#7b593e',ellipses:[[0,0,20,20,0]]},
  double_tap:{color:'#7b593e',ellipses:[[-13,-13,20,20,0],[13,13,20,20,0]]},
@@ -337,7 +337,7 @@ function render(){
   if(s.type==='stroke'){
    // 180 x 40 central cluster, 48 px steps, and blue marks at ±129 px.
    // Keep ellipses horizontal even on diagonal paths, as in the photograph.
-   paintEllipses('#e5e2bd',[[-50,0,40,20,0],[0,0,40,20,0],[50,0,40,20,0]]);
+   paintEllipses('#f0ff83',[[-50,0,40,20,0],[0,0,40,20,0],[50,0,40,20,0]]);
    paintEllipses('#1542ff',[[-129,0,25,10,0],[129,0,18,10,0]]);
   }else{
    const v=referenceGeometry[s.type];
