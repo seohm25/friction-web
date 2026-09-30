@@ -53,19 +53,11 @@ input,button{accent-color:#ff7e9a}input::placeholder{color:#f48da4}
 /* One-pixel ordered texture, independent of all text and UI colors. */
 #ui-effects::after{content:'';position:absolute;inset:0;z-index:99;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
 .pink-pixel-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}.tab-icon .pink-pixel-icon{width:29px;height:29px}.sun .pink-pixel-icon{width:1em;height:1em} .overlay{inset:0!important}
-/* iPhone / legacy iOS Safari layout + gesture compatibility */
-html,body{width:100%;max-width:100%;overflow:hidden}
-#stage{height:100vh;width:100%;max-width:100%;overflow:hidden;touch-action:none;-ms-touch-action:none}
+/* Legacy iOS Safari fallbacks */
+#stage{height:100vh}
 @supports (height:100dvh){#stage{height:100dvh}}
-/* Old Safari does not understand the `inset` shorthand. Explicit edges keep the UI full-width. */
-#ui-effects{top:0;right:0;bottom:0;left:0;width:100%;max-width:100%;overflow:hidden}
-.ios{width:100%;max-width:100%}
-.navbar,.searchbar,.screen,.toolbar{width:100%;max-width:100%}
-.settings-body{width:100%;max-width:620px;margin-left:auto;margin-right:auto}
-canvas{top:0;right:0;bottom:0;left:0;width:100%;height:100%;touch-action:none!important;-ms-touch-action:none!important}
-/* Drawing wins over Safari's initial pan gesture, so the first movement leaves a trace immediately. */
-.screen{touch-action:none!important;-ms-touch-action:none!important;overscroll-behavior:none}
-.overlay{top:0;right:0;bottom:0;left:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center}
+.settings-body{width:100%;max-width:620px}
+.overlay{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center}
 </style></head><body><main id="stage"><div id="ui-effects"><div class="ios">
 
 <header class="navbar"><button class="navbutton back">Settings</button><h1>Privacy</h1><button class="navbutton done">Done</button></header>
@@ -242,9 +234,9 @@ const stage=document.getElementById('stage');
 if(!window.PointerEvent){
  var legacyTouches={};
  function legacyTouchEvent(t,type,target){return {pointerId:t.identifier+1,pointerType:'touch',button:0,clientX:t.clientX,clientY:t.clientY,currentTarget:target||stage,preventDefault:function(){}};}
- function legacyStart(e){e.preventDefault();for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'down',stage);legacyTouches[pe.pointerId]=pe;startPointer(pe);} }
- function legacyMove(e){e.preventDefault();for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'move',stage);legacyTouches[pe.pointerId]=pe;movePointer(pe);} }
- function legacyEnd(e){e.preventDefault();for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'up',stage);endPointer(pe);delete legacyTouches[pe.pointerId];} }
+ function legacyStart(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'down',stage);legacyTouches[pe.pointerId]=pe;startPointer(pe);} }
+ function legacyMove(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'move',stage);legacyTouches[pe.pointerId]=pe;movePointer(pe);} }
+ function legacyEnd(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i],pe=legacyTouchEvent(t,'up',stage);endPointer(pe);delete legacyTouches[pe.pointerId];} }
  stage.addEventListener('touchstart',legacyStart,{passive:false});
  window.addEventListener('touchmove',legacyMove,{passive:false});
  window.addEventListener('touchend',legacyEnd,{passive:false});
@@ -265,17 +257,7 @@ window.addEventListener('pointerup',e=>{endPointer(gestureEvent(e));if(virtual){
 window.addEventListener('pointercancel',e=>{cancelPointer(e);virtual=false;guide.style.display='none';});
 window.addEventListener('blur',()=>{resetPointers();virtual=false;guide.style.display='none';});
 const originalAddShape=addShape;
-let autoResetTimer=null;
-function scheduleAutoReset(){
-  clearTimeout(autoResetTimer);
-  autoResetTimer=setTimeout(function(){
-    clearTimeout(tapTimer);pendingTap=null;resetPointers();shapes=[];
-    guide.style.display='none';virtual=false;render();
-    document.getElementById('status').textContent='Ready.';
-    autoResetTimer=null;
-  },60000);
-}
-addShape=function(type,p,size){originalAddShape(type,p,size);document.getElementById('status').textContent='Touch recorded.';render();scheduleAutoReset();};
+addShape=function(type,p,size){originalAddShape(type,p,size);document.getElementById('status').textContent='Touch recorded.';render();};
 const vectorGeometry={"drag": {"width": 956.0, "height": 232.0, "color": "#1542ff", "ellipses": [[56.0973, 116.0964, 55.9228, 115.8416, -0.0064], [104.0988, 116.0916, 55.9078, 115.8617, 0.0035], [240.0657, 116.0902, 55.9168, 115.855, 0.0032], [376.0407, 116.0858, 55.9157, 115.8552, -0.0029], [576.0047, 116.0742, 55.902, 115.8495, -0.0092], [899.9377, 116.0811, 55.9143, 115.8496, -0.0024]]}, "swipe": {"width": 1428.0, "height": 100.0, "color": "#e5e2bd", "ellipses": [[307.9385, 50.0205, 307.81, 49.9545, 0.0002], [824.0274, 50.0189, 307.7912, 49.9569, 0.0002], [1119.8717, 50.0176, 307.9846, 49.9538, 0.0004]]}, "flick": {"width": 2589.0, "height": 338.0, "color": "#1542ff", "ellipses": [[105.4078, 305.9106, 31.6175, 104.4939, 90.0055], [1321.8205, 237.5529, 36.1492, 99.9855, 90.0066], [1745.5602, 169.1999, 31.6066, 104.4855, 89.993], [2488.1561, 32.5541, 31.6524, 99.8519, 90.0112], [756.9229, 32.5526, 31.6532, 99.8044, 89.999]]}, "pinch": {"width": 90.0, "height": 140.0, "color": "#7b593e", "ellipses": [[34.9287, 43.7219, 51.5853, 21.4043, 54.1811], [55.0878, 96.1848, 51.5894, 21.4006, 54.1832]]}, "spread": {"width": 732.0, "height": 535.0, "color": "#f0ff83", "ellipses": [[219.5749, 331.7272, 283.037, 96.7923, -42.2039], [512.408, 203.425, 283.0537, 96.7853, -42.2005]]}, "nudge": {"width": 972.0, "height": 264.0, "color": "#f0ff83", "ellipses": [[124.0195, 238.0082, 123.7899, 25.8871, 0.0022], [396.0022, 176.0232, 123.7717, 23.8839, -0.0045], [685.9952, 82.0512, 125.7985, 25.8898, 0.0029], [845.9562, 26.0524, 125.7782, 25.8976, 0.0001]]}, "single_tap": {"width": 88.0, "height": 96.0, "color": "#7b593e", "ellipses": [[43.9824, 48.0418, 43.9231, 47.8563, 0.0197]]}, "double_tap": {"width": 176.0, "height": 188.0, "color": "#7b593e", "ellipses": [[55.938, 62.014, 55.8993, 61.8775, 0.2107], [119.9392, 125.9937, 55.9212, 61.8778, 0.0485]]}, "short_hold": {"width": 524.0, "height": 556.0, "color": "#e5e2bd", "ellipses": [[182.0817, 247.9742, 181.8501, 247.7915, 0.0106], [342.0591, 307.9608, 181.8617, 247.7926, 0.0052]]}};
 function render(){
  const r=canvas.getBoundingClientRect(),d=window.devicePixelRatio||1;
@@ -298,7 +280,7 @@ if(window.ResizeObserver){new ResizeObserver(render).observe(canvas.parentElemen
 document.querySelectorAll('.ios button').forEach(button=>button.addEventListener('click',event=>{
  if(event.detail===0){const r=button.getBoundingClientRect(),c=canvas.getBoundingClientRect();addShape('single_tap',{x:r.left+r.width/2-c.left,y:r.top+r.height/2-c.top},50);}
 }));
-document.getElementById('clear').onclick=()=>{clearTimeout(autoResetTimer);autoResetTimer=null;clearTimeout(tapTimer);pendingTap=null;resetPointers();shapes=[];guide.style.display='none';virtual=false;render();document.getElementById('status').textContent='Ready.';};
+document.getElementById('clear').onclick=()=>{clearTimeout(tapTimer);pendingTap=null;resetPointers();shapes=[];guide.style.display='none';virtual=false;render();document.getElementById('status').textContent='Ready.';};
 
 const screen=document.querySelector('.screen'), body=document.querySelector('.settings-body');
 const initialBody=body.innerHTML;let savedBody=initialBody;let currentPage='Settings';let historyCleared=false;
