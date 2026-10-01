@@ -411,36 +411,17 @@ body.addEventListener('click',e=>{
  if(b.classList.contains('clear-data'))dialog('Clear Cookies and Data','This will remove the website data stored in this demo.',[['Clear Cookies and Data',()=>{const row=[...body.querySelectorAll('.choice')].find(n=>n.textContent.startsWith('Website Data'));if(row)row.querySelector('.value').textContent='0 KB ›';toast('Cookies and data cleared.');}],['Cancel']]);
 });
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>selectPage(b.dataset.page)));
-// Load the AR page in advance so the homepage click can call the same
-// camera handler as its Tap button without losing the user gesture.
-const arFrame=document.createElement('iframe');
-arFrame.title='AR camera';arFrame.allow='camera; accelerometer; gyroscope';
-arFrame.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;border:0;z-index:2000;visibility:hidden;pointer-events:none;background:#151115';
-if(location.protocol!=='file:'){arFrame.src='./ar/index.html?embedded=1';document.body.appendChild(arFrame);}
-let arFrameReady=false,arActive=false;arFrame.addEventListener('load',()=>{arFrameReady=true;});
-function returnToHomepage(){
- arActive=false;arFrame.style.visibility='hidden';arFrame.style.pointerEvents='none';
- if(arFrame.contentWindow)arFrame.contentWindow.postMessage('friction-ar-stop',location.origin);
- document.querySelector('.back').focus();
-}
-window.addEventListener('popstate',returnToHomepage);
-window.addEventListener('pagehide',()=>{if(arFrame.contentWindow)arFrame.contentWindow.postMessage('friction-ar-stop',location.origin);});
+// Open AR as a full page: older Safari does not need iframe camera permissions.
 document.querySelector('.back').onclick=()=>{
- if(location.protocol==='file:'){
-  location.assign('http://localhost:8766/friction-web/index.html');return;
- }
- const start=arFrameReady&&arFrame.contentDocument&&arFrame.contentDocument.getElementById('start');
- if(!start||typeof start.onclick!=='function'){toast('AR is loading. Please tap Start AR again.');return;}
- resetPointers();flushTap();
- if(arActive)return;
- history.pushState({frictionAR:true},'',location.pathname+location.search+'#ar-camera');
- arActive=true;arFrame.style.visibility='visible';arFrame.style.pointerEvents='auto';
- start.onclick();
+ const base=location.protocol==='file:'
+  ? new URL('http://localhost:8766/friction-web/')
+  : new URL('./',location.href);
+ const arURL=new URL('ar/index.html',base);
+ arURL.searchParams.set('autostart','1');
+ arURL.searchParams.set('home','index.html');
+ resetPointers();flushTap();location.assign(arURL.href);
 };
-window.addEventListener('message',event=>{
- if(event.source!==arFrame.contentWindow||event.origin!==location.origin||event.data!=='friction-ar-close')return;
- if(arActive&&history.state&&history.state.frictionAR){history.back();}else{returnToHomepage();}
-});
+window.addEventListener('pageshow',()=>{resetPointers();});
 document.querySelector('.done').onclick=()=>{toast('Settings saved.');document.getElementById('search').blur();};
 document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();body.querySelectorAll('.setting,.choice').forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(q));body.querySelectorAll('.group').forEach(group=>group.hidden=![...group.querySelectorAll('.setting,.choice')].some(row=>!row.hidden)&&!group.querySelector('.sliderrow'));});
 </script></html>

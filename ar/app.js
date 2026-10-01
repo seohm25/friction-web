@@ -46,7 +46,16 @@ function close(){
  document.body.classList.remove('active');$('welcome').hidden=false;$('close').hidden=true;status('');busy(false);
  $('start').focus();
 }
-$('close').onclick=()=>{message('');close();if(parent!==window)parent.postMessage('friction-ar-close',location.origin);};
+$('close').onclick=()=>{
+ message('');close();
+ if(parent!==window){parent.postMessage('friction-ar-close',location.origin);return;}
+ const requested=new URLSearchParams(location.search).get('home');
+ const name=requested==='index-iphone7.html'?'index-iphone7.html':'index.html';
+ const home=new URL('../'+name,location.href);
+ let cameFromHome=false;
+ try{const ref=new URL(document.referrer);cameFromHome=ref.origin===home.origin&&ref.pathname===home.pathname;}catch{}
+ if(cameFromHome&&history.length>1){history.back();}else{location.replace(home.href);}
+};
 window.addEventListener('pagehide',close);
 document.addEventListener('visibilitychange',()=>{if(document.hidden && mode!=='idle'){close();message('Camera stopped. Tap to start again.')}});
 function pop(model){model.userData.started=performance.now();model.userData.lastFrame=0;model.userData.oriented=false;}
