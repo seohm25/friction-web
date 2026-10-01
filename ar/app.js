@@ -50,6 +50,8 @@ $('close').onclick=()=>{message('');close();if(parent!==window)parent.postMessag
 window.addEventListener('pagehide',close);
 document.addEventListener('visibilitychange',()=>{if(document.hidden && mode!=='idle'){close();message('Camera stopped. Tap to start again.')}});
 function pop(model){model.userData.started=performance.now();model.userData.lastFrame=0;model.userData.oriented=false;}
+// A shared animation clock survives poster loss/reacquisition on slower phones.
+const rotationEpoch=performance.now();
 function animateModels(){
  const now=performance.now();
  for(const model of models){
@@ -63,8 +65,8 @@ function animateModels(){
   const up=new THREE.Vector3(0,1,0).applyQuaternion(model.quaternion);
   const onWall=1-THREE.MathUtils.smoothstep(Math.abs(up.z),.45,.8);
   model.position.addScaledVector(up,-.82*onWall);
-  const elapsed=(now-model.userData.started)/1000;
-  model.traverse(part=>{if(part.userData.spinRate){part.rotation.set(0,elapsed*part.userData.spinRate*(reduced?.5:1),0);}});
+  const elapsed=(now-rotationEpoch)/1000;
+  model.traverse(part=>{if(part.userData.spinRate){part.rotation.set(0,elapsed*part.userData.spinRate*(reduced ? 0.5 : 1),0);}});
  }
 }
 async function createAR(){
