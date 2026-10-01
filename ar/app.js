@@ -148,3 +148,5 @@ if(new URLSearchParams(location.search).get('autostart')==='1'){
  $('tap-art').textContent='Start AR';$('start').classList.add('ready');
  $('start').onclick();
 }else{showTap();}
+
+window.addEventListener('message',event=>{if(event.source===parent&&event.origin===location.origin&&event.data==='friction-ar-stop'){message('');close();}});

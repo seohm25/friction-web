@@ -51,7 +51,7 @@ input,button{accent-color:#ff7e9a}input::placeholder{color:#f48da4}
 #ui-effects .alert,#ui-effects .notice-toast{background:#fff8fe!important}
 #clear{background:#fff8fe!important;color:#fae5f9!important;border-color:#fae5f9!important;text-shadow:none!important;box-shadow:none!important}
 /* One-pixel ordered texture, independent of all text and UI colors. */
-#ui-effects::after{content:'';position:absolute;inset:0;z-index:99;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
+#ui-effects::after{content:none!important}
 .pink-pixel-icon{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0}.tab-icon .pink-pixel-icon{width:29px;height:29px}.sun .pink-pixel-icon{width:1em;height:1em} .overlay{inset:0!important}
 /* iPhone / legacy iOS Safari layout + gesture compatibility */
 html,body{width:100%;max-width:100%;overflow:hidden}
@@ -71,9 +71,9 @@ canvas{top:0;right:0;bottom:0;left:0;width:100%;height:100%;touch-action:none!im
 #ui-effects{isolation:auto!important}
 #ui-effects .navbar{z-index:1000}
 #ui-effects .navbar .back{position:relative;z-index:1001;touch-action:manipulation}
-#ui-effects .navbar .back{background:linear-gradient(#ffc9f1,#ffc6e2)!important;border-color:#ffdde8!important;color:#fff!important;animation:ar-attention 1.2s steps(1,end) infinite}
-@keyframes ar-attention{0%,100%{opacity:1}50%{opacity:.25}}
-@media(prefers-reduced-motion:reduce){#ui-effects .navbar .back{animation:none}}
+#ui-effects .navbar .back{background:linear-gradient(#ffc9f1,#ffc6e2)!important;border-color:#ffdde8!important;color:#fff!important;animation:ar-attention 1.4s step-end infinite!important}
+@keyframes ar-attention{0%,49%{opacity:1}50%,100%{opacity:.22}}
+@media(prefers-reduced-motion:reduce){#ui-effects .navbar .back{animation:ar-attention 2s step-end infinite!important}}
 
 /* Explicit legacy iPhone typography for text and native form controls. */
 @font-face{font-family:LegacyiPhone;src:local('Helvetica');font-style:normal;font-weight:400;font-display:swap}
@@ -81,7 +81,7 @@ canvas{top:0;right:0;bottom:0;left:0;width:100%;height:100%;touch-action:none!im
 html,body,#ui-effects,#ui-effects button,#ui-effects input,#ui-effects select,#ui-effects textarea,#ui-effects .chevron,#clear{font-family:LegacyiPhone,Helvetica,'Helvetica Neue',Arial,sans-serif!important}
 
 /* Same dot texture over the navbar, above AR's elevated stacking layer. */
-#ui-effects .navbar::after{content:'';position:absolute;inset:0;z-index:1002;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
+#ui-effects .navbar::after{content:none!important}
 
 /* iPhone 7 / Safari 15: size the stage without relying on dynamic viewport units. */
 html,body{height:100%;width:100%;overflow:hidden}
@@ -438,7 +438,14 @@ const arFrame=document.createElement('iframe');
 arFrame.title='AR camera';arFrame.allow='camera; accelerometer; gyroscope';
 arFrame.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;border:0;z-index:2000;visibility:hidden;pointer-events:none;background:#151115';
 if(location.protocol!=='file:'){arFrame.src='./ar/index.html?embedded=1';document.body.appendChild(arFrame);}
-let arFrameReady=false;arFrame.addEventListener('load',()=>{arFrameReady=true;});
+let arFrameReady=false,arActive=false;arFrame.addEventListener('load',()=>{arFrameReady=true;});
+function returnToHomepage(){
+ arActive=false;arFrame.style.visibility='hidden';arFrame.style.pointerEvents='none';
+ if(arFrame.contentWindow)arFrame.contentWindow.postMessage('friction-ar-stop',location.origin);
+ document.querySelector('.back').focus();
+}
+window.addEventListener('popstate',returnToHomepage);
+window.addEventListener('pagehide',()=>{if(arFrame.contentWindow)arFrame.contentWindow.postMessage('friction-ar-stop',location.origin);});
 document.querySelector('.back').onclick=()=>{
  if(location.protocol==='file:'){
   location.assign('http://localhost:8766/friction-web/index.html');return;
@@ -446,13 +453,14 @@ document.querySelector('.back').onclick=()=>{
  const start=arFrameReady&&arFrame.contentDocument&&arFrame.contentDocument.getElementById('start');
  if(!start||typeof start.onclick!=='function'){toast('AR is loading. Please tap Start AR again.');return;}
  resetPointers();flushTap();
- arFrame.style.visibility='visible';arFrame.style.pointerEvents='auto';
+ if(arActive)return;
+ history.pushState({frictionAR:true},'',location.pathname+location.search+'#ar-camera');
+ arActive=true;arFrame.style.visibility='visible';arFrame.style.pointerEvents='auto';
  start.onclick();
 };
 window.addEventListener('message',event=>{
  if(event.source!==arFrame.contentWindow||event.origin!==location.origin||event.data!=='friction-ar-close')return;
- arFrame.style.visibility='hidden';arFrame.style.pointerEvents='none';
- document.querySelector('.back').focus();
+ if(arActive&&history.state&&history.state.frictionAR){history.back();}else{returnToHomepage();}
 });
 document.querySelector('.done').onclick=()=>{toast('Settings saved.');document.getElementById('search').blur();};
 document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();body.querySelectorAll('.setting,.choice').forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(q));body.querySelectorAll('.group').forEach(group=>group.hidden=![...group.querySelectorAll('.setting,.choice')].some(row=>!row.hidden)&&!group.querySelector('.sliderrow'));});
