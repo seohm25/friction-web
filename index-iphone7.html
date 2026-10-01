@@ -72,7 +72,7 @@ canvas{top:0;right:0;bottom:0;left:0;width:100%;height:100%;touch-action:none!im
 #ui-effects .navbar{z-index:1000}
 #ui-effects .navbar .back{position:relative;z-index:1001;touch-action:manipulation}
 #ui-effects .navbar .back{background:linear-gradient(#ffc9f1,#ffc6e2)!important;border-color:#ffdde8!important;color:#fff!important;animation:ar-attention 1.2s steps(1,end) infinite}
-@keyframes ar-attention{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes ar-attention{0%,100%{opacity:1}50%{opacity:.25}}
 @media(prefers-reduced-motion:reduce){#ui-effects .navbar .back{animation:none}}
 
 /* Explicit legacy iPhone typography for text and native form controls. */
@@ -82,6 +82,11 @@ html,body,#ui-effects,#ui-effects button,#ui-effects input,#ui-effects select,#u
 
 /* Same dot texture over the navbar, above AR's elevated stacking layer. */
 #ui-effects .navbar::after{content:'';position:absolute;inset:0;z-index:1002;pointer-events:none;background-image:radial-gradient(circle at 1px 1px,#eec9e8 0 .55px,transparent .65px),radial-gradient(circle at 3px 3px,#fff 0 .55px,transparent .65px);background-size:4px 4px;opacity:.27}
+
+/* iPhone 7 / Safari 15: size the stage without relying on dynamic viewport units. */
+html,body{height:100%;width:100%;overflow:hidden}
+#stage{height:var(--iphone7-height,100vh)!important;min-height:0!important}
+.search input{font-size:16px}
 </style></head><body><main id="stage"><div id="ui-effects"><div class="ios">
 
 <header class="navbar"><button class="navbutton back" aria-label="Start AR">Start AR</button><h1>Privacy</h1><button class="navbutton done">Done</button></header>
@@ -98,7 +103,18 @@ html,body,#ui-effects,#ui-effects button,#ui-effects input,#ui-effects select,#u
 <h2 class="section-title">Advanced</h2><div class="group"><div class="setting">Do Not Track<button class="switch off">OFF</button></div><div class="setting">Save Form Data<button class="switch">ON</button></div><button class="choice" data-action="history">Clear History</button><button class="choice" data-action="reset">Reset All Settings</button></div><div class="demo-note">Touch study · Simulated settings · No device settings are changed.</div>
 </div></div>
 <nav class="toolbar"><button class="tab" data-page="Bookmarks"><span class="tab-icon" aria-hidden="true">▤</span>Bookmarks</button><button class="tab" data-page="History"><span class="tab-icon" aria-hidden="true">◷</span>History</button><button class="tab active" data-page="Settings"><span class="tab-icon" aria-hidden="true"><svg class="pink-pixel-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><pattern id="pink-settings-gear" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#fae5f9"/><rect width="1" height="1" fill="#e8bddd"/><rect x="2" y="2" width="1" height="1" fill="#fff7fe"/></pattern></defs><g fill="url(#pink-settings-gear)"><path fill-rule="evenodd" d="M16 5a11 11 0 1 0 0 22 11 11 0 0 0 0-22Zm0 6a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(0 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(45 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(90 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(135 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(180 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(225 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(270 16 16)"/><rect x="13" y="1" width="6" height="7" rx="1" transform="rotate(315 16 16)"/></g></svg></span>Settings</button><button class="tab" data-page="About"><span class="tab-icon" aria-hidden="true">ⓘ</span>About</button></nav>
-</div></div><canvas id="canvas" aria-label="Touch the simulated interface to leave gesture traces"></canvas><div id="guide"></div><button id="clear">Reset traces</button></main><div id="status"></div><script>let shapes = [];
+</div></div><canvas id="canvas" aria-label="Touch the simulated interface to leave gesture traces"></canvas><div id="guide"></div><button id="clear">Reset traces</button></main><div id="status"></div><script>
+// Keep the drawing surface inside the visible Safari viewport as browser bars move.
+function sizeIPhone7Stage(){
+ const height=window.visualViewport?window.visualViewport.height:window.innerHeight;
+ document.documentElement.style.setProperty('--iphone7-height',Math.round(height)+'px');
+}
+sizeIPhone7Stage();
+window.addEventListener('resize',sizeIPhone7Stage);
+window.addEventListener('orientationchange',sizeIPhone7Stage);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',sizeIPhone7Stage);
+
+let shapes = [];
 let images = {};
 
 // Distances are CSS pixels; speeds are pixels per millisecond.
@@ -325,7 +341,10 @@ function scheduleAutoReset(){
     autoResetTimer=null;
   },60000);
 }
-addShape=function(type,p,size){originalAddShape(type,p,size);document.getElementById('status').textContent='Touch recorded.';render();scheduleAutoReset();};
+// Render at most once per display frame while preserving every gesture mark.
+let drawingFrame=0;
+function queueDrawing(){if(!drawingFrame)drawingFrame=requestAnimationFrame(()=>{drawingFrame=0;render();});}
+addShape=function(type,p,size){originalAddShape(type,p,size);document.getElementById('status').textContent='Touch recorded.';queueDrawing();scheduleAutoReset();};
 // Reference artwork only: the existing settings background is unchanged.
 const referenceGeometry={
  drag:{color:'#1542ff',ellipses:[[-70,0,28,58,0],[0,0,28,58,0],[70,0,28,58,0]]},
@@ -345,8 +364,10 @@ function paintEllipses(color,ellipses){
  }
 }
 function render(){
- const r=canvas.getBoundingClientRect(),d=window.devicePixelRatio||1;
- canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);ctx.scale(d,d);
+ const r=canvas.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);
+ const width=Math.round(r.width*d),height=Math.round(r.height*d);
+ if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
+ ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,r.width,r.height);
  const scale=referenceScale();
  for(const s of shapes){
   ctx.save();ctx.translate(s.x,s.y);ctx.scale(scale,scale);
